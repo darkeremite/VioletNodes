@@ -3,13 +3,8 @@ import EventBuilder from '../../utils/EventBuilder.js'
 import Bot from '../../utils/Bot.js'
 
 function findInteraction(client: Bot, id: string) {
-	try {
-		let execute = client.getInteraction(id)!
-		return execute
-	} catch (e) {
-		client.logger.error(`Interaction ${id} not found in client`)
-		client.logger.error(e)
-	}
+	let execute = client.getInteraction(id)
+	return execute
 }
 
 export default new EventBuilder({
@@ -27,9 +22,14 @@ export default new EventBuilder({
 				client.logger.info(
 					`(${interaction.user.id}) ${interaction.user.username} use command /${interaction.commandName}`
 				)
-				let execute = findInteraction(client, interaction.commandName)
-				await execute
-				break
+				try {
+					let execute = findInteraction(client, interaction.commandName)!
+					await execute(interaction)
+					break	
+				} catch (e) {
+					client.logger.error(`Interaction ${interaction.commandName} not found in client`)
+					client.logger.error(e)
+				}
 		}
 	},
 })

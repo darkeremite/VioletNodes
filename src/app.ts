@@ -3,6 +3,6 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const world_crisis_bot = new Bot(process.env.BOT_TOKEN, process.env.BOT_NAME)
+const VioletCord = new Bot(process.env.BOT_TOKEN, process.env.BOT_NAME)
 
-world_crisis_bot.run()
+VioletCord.run()

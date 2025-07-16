@@ -3,6 +3,7 @@ import { join } from 'path'
 import { readdirSync } from 'fs'
 import AppCommandBuilder from '../utils/AppCommandBuilder.js'
 import { ApplicationCommandData, ApplicationCommandType } from 'discord.js'
+import { pathToFileURL } from 'url'
 
 export default async (client: Bot): Promise<Array<ApplicationCommandData>> => {
 	const commandPath = join(client.bot_dirname, 'commands')
@@ -15,7 +16,7 @@ export default async (client: Bot): Promise<Array<ApplicationCommandData>> => {
 			try {
 				client.logger.debug(`Bot found file command ${file}`)
 				const command: AppCommandBuilder<ApplicationCommandType> = await import(
-					join(commandPath, file)
+					pathToFileURL(join(commandPath, file)).href
 				)
 					.then(module => module.default)
 					.finally()

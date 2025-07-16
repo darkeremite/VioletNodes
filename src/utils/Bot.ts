@@ -28,9 +28,14 @@ export default class Bot extends Client {
 		this._bot_name = bot_dirname
 		this._interactions = new Map()
 
-		const bot_dir = join(defaultDir, bot_dirname)
-		this.logger.debug(`Bot dir path: ${bot_dir}`)
-		this.bot_dirname = bot_dir
+		if (defaultDir) {
+			const bot_dir = join(defaultDir, bot_dirname)
+			this.logger.debug(`Bot dir path: ${bot_dir}`)
+			this.bot_dirname = bot_dir
+		}
+		else {
+			throw new Error("Operating system don't support for this bot")
+		}
 
 		eventHandler(this)
 	}

@@ -1,6 +1,7 @@
 import Bot from '../utils/Bot.js'
 import { join } from 'path'
 import { readdirSync } from 'fs'
+import { pathToFileURL } from 'url'
 
 export default (client: Bot): void => {
 	const eventPath = join(client.bot_dirname, 'events')
@@ -11,7 +12,7 @@ export default (client: Bot): void => {
 			.forEach(async file => {
 				try {
 					client.logger.debug(`Bot found file event ${file}`)
-					const event = await import(join(eventPath, file)).then(
+					const event = await import(pathToFileURL(join(eventPath, file)).href).then(
 						module => module.default
 					)
 					if (event.once) {
@@ -19,7 +20,7 @@ export default (client: Bot): void => {
 					} else {
 						client.on(event.name, (...args) => event.execute(client, ...args))
 					}
-					client.logger.debug(`Bot loaded event (${event.name})`)
+					client.logger.debug(`Bot loaded event ${event.name}`)
 				} catch (error) {
 					client.logger.warn(`Bot can't loading event ${file}: \n${error}`)
 				}
