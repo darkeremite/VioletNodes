@@ -19,14 +19,18 @@ export default class Bot extends Client {
 	private _bot_name: string
 	//bot interactions for event InteractionCreate
 	private _interactions: Map<string, (interaction: Interaction) => Promise<any>>
+	//ssh module
+	private _ssh_client: undefined
 
-	constructor(token: string, bot_dirname: string) {
+	constructor(token: string, bot_dirname: string, ssh_module:undefined=undefined) {
 		super({ intents: [] })
 		this.logger.debug(`Bot initialization: ${bot_dirname}`)
 
 		this._bot_token = token
 		this._bot_name = bot_dirname
 		this._interactions = new Map()
+
+		this._ssh_client = ssh_module
 
 		if (defaultDir) {
 			const bot_dir = join(defaultDir, bot_dirname)
