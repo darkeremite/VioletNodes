@@ -1,0 +1,24 @@
+{
+	"name": "world_crisis_ds_bot",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.js",
+	"scripts": {
+		"build": "tsc --build",
+		"start": "node build/app.js",
+		"clean-win": "del /s /q build",
+		"clean-linux": "rm -r build",
+		"refresh-win": "npm run clean-win && npm run build && npm run start",
+		"refresh-linux": "npm run clean-linux && npm run build && npm run start"
+	},
+	"keywords": [],
+	"author": "dark_eremite",
+	"license": "ISC",
+	"type": "module",
+	"dependencies": {
+		"discord.js": "^14.19.3",
+		"dotenv": "^16.5.0",
+		"typescript": "^5.8.3",
+		"winston": "^3.17.0"
+	}
+}
