@@ -1,15 +1,13 @@
 import { Client, Interaction } from 'discord.js'
-import { createLogger, format, transports } from 'winston'
+import logger from './Logger.js'
 import { join } from 'path'
 import defaultDir from '../utils/defaultDir.js'
 import eventHandler from '../handlers/eventHandler.js'
+import sshClient from '../VioletCord/modules/sshclient/sshClient.js'
 
 export default class Bot extends Client {
-	logger = createLogger({
-		level: process.env.DEBUG ? 'debug' : 'info',
-		format: format.cli(),
-		transports: [new transports.Console()],
-	})
+	logger = logger
+
 	//bot directory whit events and interactions
 	bot_dirname: string
 
@@ -20,9 +18,9 @@ export default class Bot extends Client {
 	//bot interactions for event InteractionCreate
 	private _interactions: Map<string, (interaction: Interaction) => Promise<any>>
 	//ssh module
-	private _ssh_client: undefined
+	private _ssh_client?: sshClient
 
-	constructor(token: string, bot_dirname: string, ssh_module:undefined=undefined) {
+	constructor(token: string, bot_dirname: string, ssh_module:sshClient|undefined=undefined) {
 		super({ intents: [] })
 		this.logger.debug(`Bot initialization: ${bot_dirname}`)
 
@@ -59,6 +57,9 @@ export default class Bot extends Client {
 
 	run(): void {
 		this.logger.debug(`Bot is starting...`)
+		if (this._ssh_client) {
+			this._ssh_client.Init()
+		}
 		this.login(this._bot_token)
 			.then(() => {
 				this.logger.info(`Bot started successfully`)
