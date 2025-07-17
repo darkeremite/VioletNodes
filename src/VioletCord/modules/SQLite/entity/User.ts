@@ -10,5 +10,5 @@ export class User {
     balance: number
 
     @Column()
-    invite_link: string
+    invite_link?: string
 }

@@ -2,8 +2,8 @@ import { DataSource } from "typeorm";
 
 export default new DataSource({
     type: "sqlite",
-    database: "violetcore.db",
+    database: "violetcord.db",
     synchronize: true,
     logging: true,
-    entities: ["src/entity/*.ts"]
+    entities: ["src/VioletCord/modules/SQLite/entity/*.ts"]
 })

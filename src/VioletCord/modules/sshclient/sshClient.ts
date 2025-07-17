@@ -37,6 +37,9 @@ class sshClient {
             username: this._connConf.username,
             password: this._connConf.password,
         })
+        this._conn.connect({
+            
+        })
     }
 
     public async checkAlive(): Promise<any> {
