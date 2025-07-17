@@ -14,7 +14,7 @@ export default new AppCommandBuilder<ApplicationCommandType.ChatInput>({
 	dmPermission: false,
 	defaultMemberPermissions: PermissionsBitField.Flags.ModerateMembers,
 
-	execute: async (interaction: ChatInputCommandInteraction) => {
+	execute: async (client, interaction: ChatInputCommandInteraction) => {
 		await interaction.reply({
 			content: 'Pong!',
 			flags: MessageFlags.Ephemeral

@@ -13,7 +13,11 @@ class sshClient {
         this._connConf = connectConfig
     }
 
-    Init() {
+    get connectionAlive() {
+        return this._connAlive
+    }
+
+    public Init() {
         dotenv.config()
 
         this._conn.on('end', () => {
@@ -35,16 +39,32 @@ class sshClient {
         })
     }
 
-    public async checkAlive(): Promise<boolean> {
+    public async checkAlive(): Promise<any> {
         try {
             await this._conn.once("ready", () => this._logger.debug("SSH connection is ready!"));
             this._connAlive = true
-            return true;
         } catch {
             this._connAlive = false
-            return false;
         }
-  }
+    }
+
+    public async execCommand(command:string) {
+        return new Promise((resolve, reject) => {
+            this._conn.exec(command, (err, stream) => {
+                if (err) return reject(err);
+
+                let output = '';
+                stream
+                .on('data', (data: Buffer) => output += data.toString())
+                .on('close', () => resolve(output))
+                .stderr.on('data', (data) => reject(data.toString()));
+            });
+        });
+    }
+
+    public async deployCommand() {
+        await this.execCommand("echo 'this is deploy command!'")
+    }
 }
 
 export default sshClient

@@ -10,15 +10,15 @@ export default class Bot extends Client {
 
 	//bot directory whit events and interactions
 	bot_dirname: string
+	//ssh module
+	ssh_client?: sshClient
 
 	//bot token
 	private _bot_token: string
 	//bot name for logging
 	private _bot_name: string
 	//bot interactions for event InteractionCreate
-	private _interactions: Map<string, (interaction: Interaction) => Promise<any>>
-	//ssh module
-	private _ssh_client?: sshClient
+	private _interactions: Map<string, (client:Bot, interaction: Interaction) => Promise<any>>
 
 	constructor(token: string, bot_dirname: string, ssh_module:sshClient|undefined=undefined) {
 		super({ intents: [] })
@@ -28,7 +28,7 @@ export default class Bot extends Client {
 		this._bot_name = bot_dirname
 		this._interactions = new Map()
 
-		this._ssh_client = ssh_module
+		this.ssh_client = ssh_module
 
 		if (defaultDir) {
 			const bot_dir = join(defaultDir, bot_dirname)
@@ -44,21 +44,21 @@ export default class Bot extends Client {
 
 	addInteraction(
 		id: string,
-		callback: (interaction: Interaction) => Promise<any>
+		callback: (client:Bot, interaction: Interaction) => Promise<any>
 	) {
 		this._interactions.set(id, callback)
 	}
 
 	getInteraction(
 		name: string
-	): ((interaction: Interaction) => Promise<any>) | undefined {
+	): ((client:Bot, interaction: Interaction) => Promise<any>) | undefined {
 		return this._interactions.get(name)
 	}
 
 	run(): void {
 		this.logger.debug(`Bot is starting...`)
-		if (this._ssh_client) {
-			this._ssh_client.Init()
+		if (this.ssh_client) {
+			this.ssh_client.Init()
 		}
 		this.login(this._bot_token)
 			.then(() => {

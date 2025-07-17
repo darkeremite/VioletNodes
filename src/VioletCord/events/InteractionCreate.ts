@@ -24,7 +24,7 @@ export default new EventBuilder({
 				)
 				try {
 					let execute = findInteraction(client, interaction.commandName)!
-					await execute(interaction)
+					await execute(client, interaction)
 					break	
 				} catch (e) {
 					client.logger.error(`Interaction ${interaction.commandName} not found in client`)
