@@ -63,7 +63,7 @@ class sshClient {
     }
 
     public async deployCommand(): Promise<string> {
-        const ret = await this.execCommand("echo 'this is deploy command!'")
+        const ret = await this.execCommand(process.env.SSH_COMMAND_DEPLOY)
         this._logger.debug(`result deploy command:\n${ret}`)
         return ret
     }
