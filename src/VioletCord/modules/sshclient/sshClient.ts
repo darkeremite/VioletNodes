@@ -57,7 +57,7 @@ class sshClient {
                 stream
                 .on('data', (data: Buffer) => output += data.toString())
                 .on('close', () => { resolve(output) })
-                .stderr.on('data', (data) => {
+                .stderr.on('data', (data:Buffer) => {
                     this._logger.error(`SSH command error:\n${data.toString()}`)
                     reject(data.toString())
                 });
@@ -66,9 +66,9 @@ class sshClient {
     }
 
     public async deployCommand(): Promise<string> {
-            const ret = await this.execCommand(process.env.SSH_COMMAND_DEPLOY)
-            this._logger.debug(`result deploy command:\n${ret}`)
-            return ret
+        const ret = await this.execCommand(process.env.SSH_COMMAND_DEPLOY)
+        this._logger.debug(`result deploy command:\n${ret}`)
+        return ret
     }
 }
 
