@@ -51,7 +51,7 @@ class sshClient {
     public async execCommand(command:string) {
         return new Promise<string>((resolve, reject) => {
             this._conn.exec(command, (err, stream) => {
-                if (err) return reject(err);
+                if (err) return reject(`${err.name}`);
 
                 let output = '';
                 stream
