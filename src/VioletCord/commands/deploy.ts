@@ -16,9 +16,6 @@ export default new AppCommandBuilder<ApplicationCommandType.ChatInput>({
 	defaultMemberPermissions: PermissionsBitField.Flags.ModerateMembers,
 
 	execute: async (client, interaction: ChatInputCommandInteraction) => {
-		await interaction.deferReply({
-			flags: MessageFlags.Ephemeral
-		})
 		if (!checkSSH(client)) {
 			await interaction.reply({
 					content: 'Error connect to server!',

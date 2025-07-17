@@ -49,7 +49,7 @@ class sshClient {
     }
 
     public async execCommand(command:string) {
-        return new Promise((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
             this._conn.exec(command, (err, stream) => {
                 if (err) return reject(err);
 
@@ -62,8 +62,10 @@ class sshClient {
         });
     }
 
-    public async deployCommand() {
-        await this.execCommand("echo 'this is deploy command!'")
+    public async deployCommand(): Promise<string> {
+        const ret = await this.execCommand("echo 'this is deploy command!'")
+        this._logger.debug(`result deploy command:\n${ret}`)
+        return ret
     }
 }
 
