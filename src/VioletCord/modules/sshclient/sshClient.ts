@@ -56,7 +56,10 @@ class sshClient {
                 let output = '';
                 stream
                 .on('data', (data: Buffer) => output += data.toString())
-                .on('close', () => resolve(output))
+                .on('close', () => {
+                    console.log(output)
+                    resolve(output)
+                })
                 .stderr.on('data', (data) => reject(data.toString()));
             });
         });
