@@ -1,14 +1,17 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
 
-@Entity()
+@Entity({name:"Users"})
 export class User {
-    @PrimaryColumn()
-    discord_id: number
+    @PrimaryColumn({type:"text"})
+    discord_id: string
 
-    @Column()
-    balance: number
+    @Column({type:"integer"})
+    balance: number = 0
 
-    @Column()
-    invite_link?: string
+    @Column({
+        nullable: true,
+        type: "text"
+    })
+    invite_link?: string = undefined
 }

@@ -2,4 +2,4 @@
 /.vscode
 /build
 /node_modules
-/src/VioletCord/modules/SQLite/violetcord.db
+/violetcord.db

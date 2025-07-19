@@ -1,9 +1,10 @@
-import { Client, Interaction } from 'discord.js'
+import { Client, GatewayIntentBits, IntentsBitField, Interaction } from 'discord.js'
 import logger from './Logger.js'
 import { join } from 'path'
 import defaultDir from '../utils/defaultDir.js'
 import eventHandler from '../handlers/eventHandler.js'
 import sshClient from '../VioletCord/modules/sshclient/sshClient.js'
+import sqliteClient from '../VioletCord/modules/SQLite/sqliteClient.js'
 
 export default class Bot extends Client {
 	logger = logger
@@ -12,6 +13,8 @@ export default class Bot extends Client {
 	bot_dirname: string
 	//ssh module
 	ssh_client?: sshClient
+	//sqlite client
+	sqlite_client?: sqliteClient
 
 	//bot token
 	private _bot_token: string
@@ -20,8 +23,12 @@ export default class Bot extends Client {
 	//bot interactions for event InteractionCreate
 	private _interactions: Map<string, (client:Bot, interaction: Interaction) => Promise<any>>
 
-	constructor(token: string, bot_dirname: string, ssh_module:sshClient|undefined=undefined) {
-		super({ intents: [] })
+	constructor(token: string, bot_dirname: string, ssh_module:sshClient|undefined=undefined, sqlite_module:sqliteClient|undefined=undefined) {
+		super({ intents: [
+			GatewayIntentBits.GuildMembers,
+			GatewayIntentBits.GuildInvites,
+			GatewayIntentBits.Guilds
+		] })
 		this.logger.debug(`Bot initialization: ${bot_dirname}`)
 
 		this._bot_token = token
@@ -29,6 +36,7 @@ export default class Bot extends Client {
 		this._interactions = new Map()
 
 		this.ssh_client = ssh_module
+		this.sqlite_client = sqlite_module
 
 		if (defaultDir) {
 			const bot_dir = join(defaultDir, bot_dirname)
@@ -58,7 +66,12 @@ export default class Bot extends Client {
 	run(): void {
 		this.logger.debug(`Bot is starting...`)
 		if (this.ssh_client) {
+			this.logger.debug("SSH client created")
 			this.ssh_client.Init()
+		}
+		if (this.sqlite_client) {
+			this.logger.debug("SQLite client created")
+			this.sqlite_client.Init()
 		}
 		this.login(this._bot_token)
 			.then(() => {

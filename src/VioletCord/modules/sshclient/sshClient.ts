@@ -5,7 +5,6 @@ import logger from "../../../utils/Logger.js";
 class sshClient {
     private _conn = new Client()
     private _connAlive = false
-    private _logger = logger
 
     private _connConf: ConnectConfig
 
@@ -22,15 +21,15 @@ class sshClient {
 
         this._conn.on('end', () => {
             this._connAlive = false
-            this._logger.warn('SSH connection close');
+            logger.warn('SSH connection close');
         });
         this._conn.on('error', (err) => {
             this._connAlive = false
-            this._logger.error('SSH connection execute new error')
-            this._logger.error(`[${err.level}] ${err.name}:\n${err.message}\n\n${err.description}`)
+            logger.error('SSH connection execute new error')
+            logger.error(`[${err.level}] ${err.name}:\n${err.message}\n\n${err.description}`)
         })
-        this._conn.once("ready", () => this._logger.info("SSH connection is ready!"));
-        this._logger.debug("Trying connect to SSH...")
+        this._conn.once("ready", () => logger.info("SSH connection is ready!"));
+        logger.debug("Trying connect to SSH...")
         this._conn.connect({
             host: this._connConf.host,
             port: this._connConf.port,
@@ -44,7 +43,7 @@ class sshClient {
 
     public async checkAlive(): Promise<any> {
         try {
-            await this._conn.once("ready", () => this._logger.debug("SSH connection is ready!"));
+            await this._conn.once("ready", () => logger.debug("SSH connection is ready!"));
             this._connAlive = true
         } catch {
             this._connAlive = false
@@ -61,7 +60,7 @@ class sshClient {
                 .on('data', (data: Buffer) => output += data.toString())
                 .on('close', () => { resolve(output) })
                 .stderr.on('data', (data:Buffer) => {
-                    this._logger.error(`SSH command error:\n${data.toString()}`)
+                    logger.error(`SSH command error:\n${data.toString()}`)
                     reject(data.toString())
                 });
             });
@@ -70,7 +69,7 @@ class sshClient {
 
     public async deployCommand(): Promise<string> {
         const ret = await this.execCommand(process.env.SSH_COMMAND_DEPLOY)
-        this._logger.debug(`result deploy command:\n${ret}`)
+        logger.debug(`result deploy command:\n${ret}`)
         return ret
     }
 }
