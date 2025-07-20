@@ -35,9 +35,7 @@ class sshClient {
             port: this._connConf.port,
             username: this._connConf.username,
             password: this._connConf.password,
-        })
-        this._conn.connect({
-            
+            debug: process.env.DEBUG ? logger.debug : undefined
         })
     }
 
