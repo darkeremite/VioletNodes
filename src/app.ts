@@ -11,7 +11,8 @@ new sshClient({
     host: process.env.SSH_HOST,
     port: process.env.SSH_PORT,
     username: process.env.SSH_USERNAME,
-    password: process.env.SSH_PASSWORD
+    password: process.env.SSH_PASSWORD,
+    privateKey: process.env.SSH_PRIVATE_KEY
 })
 
 const VioletSQLite = new sqliteClient()

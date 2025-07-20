@@ -8,7 +8,8 @@ namespace NodeJS {
 		SSH_HOST: string,
 		SSH_PORT: number,
 		SSH_USERNAME: string,
-		SSH_PASSWORD: string,
+		SSH_PASSWORD?: string,
+		SSH_PRIVATE_KEY?: string
 
 		SSH_COMMAND_DEPLOY: string
 	}
