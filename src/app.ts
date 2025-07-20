@@ -6,7 +6,7 @@ import sqliteClient from './VioletCord/modules/SQLite/sqliteClient.js'
 dotenv.config()
 
 //Build VioletCord
-const VioletSSH = undefined
+const VioletSSH = 
 new sshClient({
     host: process.env.SSH_HOST,
     port: process.env.SSH_PORT,
